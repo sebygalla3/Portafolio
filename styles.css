@@ -304,6 +304,70 @@ img {
   }
 }
 
+/* En pantallas grandes usar 60% texto / 40% imagen */
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: 60% 40%;
+  }
+
+  /* La caja de contenido ocupa su columna (60%) */
+  .hero-content {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Ajustar la zona de la imagen para ocupar la columna derecha */
+  .hero-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hero-overlay {
+    /* si se activa, cubrir sólo la columna de la imagen */
+    right: 0;
+    width: 40%;
+  }
+}
+
+/* Tablet: poner texto encima de la imagen y evitar overflow (iPad Pro 11 aprox) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hero {
+    display: block; /* columna: texto arriba, imagen abajo */
+    padding: 6.5rem 0 4rem;
+    min-height: auto;
+  }
+
+  .hero-background {
+    position: relative; /* dentro del flujo */
+    top: auto;
+    right: auto;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    z-index: -2;
+  }
+
+  .hero-image {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: 55vh; /* que no se vaya fuera de la pantalla */
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-content {
+    margin: 0 auto 1.5rem;
+    max-width: 900px;
+    text-align: center;
+    padding: 2.25rem 2rem;
+  }
+}
+
 /* Asegurar que la imagen ocupe todo el espacio disponible */
 .hero-background {
   position: absolute;
@@ -483,6 +547,33 @@ img {
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
+}
+
+/* Overlay y efecto hover para proyectos */
+.project-image {
+  position: relative;
+}
+
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.project-image:hover .project-overlay {
+  opacity: 1;
+}
+
+.project-image:hover img {
+  transform: scale(1.06);
 }
 
 .project-card:hover .project-image img {
@@ -737,12 +828,12 @@ img {
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     min-height: 100%;
   }
 
   .hero-content {
-    padding: 0 1.5rem;
+    padding: 2rem 1.5rem;
     position: relative;
     z-index: 1;
     text-align: center;
