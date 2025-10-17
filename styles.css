@@ -174,9 +174,23 @@ img {
   transition: var(--transition);
 }
 
+/* Texto del logo (cuando se usa texto en lugar de imagen) */
+.logo-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--dark);
+  letter-spacing: 0.5px;
+  text-transform: lowercase;
+}
+
+.logo-text:hover {
+  color: var(--primary);
+  transform: scale(1.02);
+}
+
 /* Ajustar el espaciado vertical del header para el logo */
 .header {
-  padding: 1.5rem 0; /* Aumentado el padding vertical */
+  padding: 0.5rem 0; /* Aumentado el padding vertical */
 }
 
 /* Asegurar que el contenedor del logo tenga suficiente espacio */
@@ -243,19 +257,21 @@ img {
 /* Hero */
 .hero {
   position: relative;
-  padding: 12rem 0 8rem;
-  text-align: center;
+  padding: 8rem 0 6rem;
   color: #fff;
   overflow: hidden;
   min-height: 80vh; /* Altura mínima para pantallas grandes */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* texto | imagen */
+  align-items: center;
 }
 
 .hero-background {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  width: 50%; /* ocupar la mitad derecha */
   z-index: -2;
   overflow: hidden;
 }
@@ -265,7 +281,7 @@ img {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 /* Ajustes para móviles */
@@ -299,35 +315,54 @@ img {
 }
 
 .hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: -1;
+  /* Overlay desactivado: ocultamos el elemento visualmente */
+  display: none;
 }
 
 .hero-content {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 700px;
+  margin: 0; /* no centrar, lo ubicamos en la columna izquierda */
   position: relative;
   z-index: 1;
+  padding: 2rem 2.5rem;
+  background: rgba(0, 0, 0, 0.35); /* fondo semitransparente para legibilidad */
+  backdrop-filter: blur(
+    4px
+  ); /* suaviza la imagen detrás (opcional en navegadores compatibles) */
+  border-radius: 12px;
+  justify-self: start;
+  text-align: left;
 }
 
 .hero h1 {
   font-size: 3.5rem;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .hero .lead {
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 2.5rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+/* Asegurar que los botones sean legibles sobre el fondo semitransparente */
+.hero .btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.hero .btn-secondary {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.hero .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.18);
 }
 
 /* Ajustes para móviles */
@@ -345,10 +380,42 @@ img {
   }
 }
 
+/* Más espacio dentro del contenedor 'vidrio' en móviles */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 3rem 1.5rem; /* más espacio vertical para móviles */
+    border-radius: 10px;
+    max-width: calc(100% - 2rem);
+  }
+
+  .hero h1 {
+    margin-top: 0.25rem; /* separa ligeramente el título del borde superior */
+    margin-bottom: 1rem; /* espacio extra debajo del título */
+  }
+
+  .hero .lead {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    padding: 3.5rem 1.25rem; /* mayor padding vertical en móviles pequeños */
+    border-radius: 8px;
+    max-width: calc(100% - 1.5rem);
+  }
+
+  .hero h1 {
+    font-size: 2rem; /* aseguramos tamaño legible y separación */
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
 .cta-group {
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start; /* botones a la izquierda */
   flex-wrap: wrap;
 }
 
@@ -633,12 +700,53 @@ img {
     text-align: center;
   }
 
+  .hero {
+    display: block; /* volver a una sola columna */
+    padding: 8rem 0 6rem;
+    min-height: 60vh;
+    text-align: center;
+  }
+
   .hero h1 {
     font-size: 2.5rem;
+    text-align: center;
   }
 
   .hero .lead {
     font-size: 1.125rem;
+    text-align: center;
+  }
+
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+  }
+
+  .hero-overlay {
+    display: none;
+  }
+
+  .hero-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 100%;
+  }
+
+  .hero-content {
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin: 0 auto;
   }
 
   .cta-group {
