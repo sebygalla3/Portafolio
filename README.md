@@ -10,4 +10,4 @@ Sitio web responsive diseñado en Figma y desarrollado en HTML, CSS y JS.
 [👉 Ver sitio en vivo](https://sebygallaportafolio.netlify.app)
 
 ## 📸 Capturas
-![screenshot](./img/landingpage.png
+![screenshot](./img/landingpage.png)
