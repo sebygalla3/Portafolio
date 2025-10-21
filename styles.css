@@ -12,6 +12,8 @@
   --error: #ef4444;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  /* Para look plano: ninguna sombra por defecto */
+  --shadow-flat: none;
   --transition: all 0.3s ease;
 }
 
@@ -115,8 +117,8 @@ img {
 
 .btn-primary:hover {
   background-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  transform: none;
+  box-shadow: var(--shadow-flat);
 }
 
 .btn-secondary {
@@ -127,7 +129,7 @@ img {
 
 .btn-secondary:hover {
   background-color: rgba(37, 99, 235, 0.1);
-  transform: translateY(-2px);
+  transform: none;
 }
 
 .btn-outline {
@@ -185,7 +187,6 @@ img {
 
 .logo-text:hover {
   color: var(--primary);
-  transform: scale(1.02);
 }
 
 /* Ajustar el espaciado vertical del header para el logo */
@@ -227,7 +228,7 @@ img {
 .logo:hover .logo-img,
 .logo:hover .footer-logo {
   opacity: 1;
-  transform: scale(1.05);
+  /* sin transform para look plano */
 }
 
 .nav {
@@ -257,7 +258,7 @@ img {
 /* Hero */
 .hero {
   position: relative;
-  padding: 8rem 0 6rem;
+  padding: 8rem 8rem 6rem;
   color: #fff;
   overflow: hidden;
   min-height: 80vh; /* Altura mínima para pantallas grandes */
@@ -290,7 +291,7 @@ img {
     width: auto;
     min-width: 100%;
     min-height: 100%;
-    position: absolute;
+    position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -307,23 +308,41 @@ img {
 /* En pantallas grandes usar 60% texto / 40% imagen */
 @media (min-width: 1024px) {
   .hero {
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 1fr 1fr; /* 50% texto | 50% imagen */
+    gap: 0; /* espacio controlado con margenes en .hero-content */
+    align-items: stretch;
   }
 
   /* La caja de contenido ocupa su columna (60%) */
   .hero-content {
     width: 100%;
     max-width: none;
+    margin: 0;
+    padding-left: 4rem; /* separa el texto de la imagen */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centrar verticalmente */
   }
 
   /* Ajustar la zona de la imagen para ocupar la columna derecha */
   .hero-background {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40%;
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
     height: 100%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain; /* mostrar la imagen completa */
+    object-position: center;
   }
 
   .hero-overlay {
@@ -365,6 +384,7 @@ img {
     max-width: 900px;
     text-align: center;
     padding: 2.25rem 2rem;
+    margin-bottom: 2.5rem; /* más separación entre el contenedor vidrio y la imagen en tablet */
   }
 }
 
@@ -389,11 +409,10 @@ img {
   position: relative;
   z-index: 1;
   padding: 2rem 2.5rem;
-  background: rgba(0, 0, 0, 0.2); /* fondo semitransparente para legibilidad */
-  backdrop-filter: blur(
-    5px
-  ); /* suaviza la imagen detrás (opcional en navegadores compatibles) */
-  border-radius: 12px;
+  background: transparent; /* quitar el contenedor tipo "vidrio" */
+  backdrop-filter: none;
+  border-radius: 0;
+  color: var(--dark); /* texto oscuro para contraste con fondo blanco */
   justify-self: start;
   text-align: left;
 }
@@ -402,15 +421,13 @@ img {
   font-size: 3.5rem;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4);
+  color: var(--dark);
 }
 
 .hero .lead {
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--gray);
   margin-bottom: 2.5rem;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 /* Asegurar que los botones sean legibles sobre el fondo semitransparente */
@@ -420,13 +437,13 @@ img {
 }
 
 .hero .btn-secondary {
-  background-color: rgba(255, 255, 255, 0.12);
-  color: var(--white);
-  border-color: rgba(255, 255, 255, 0.18);
+  background-color: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 .hero .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.18);
+  background-color: rgba(37, 99, 235, 0.08);
 }
 
 /* Ajustes para móviles */
@@ -441,6 +458,13 @@ img {
 
   .hero .lead {
     font-size: 1.1rem;
+  }
+}
+
+/* Aumentar separación extra en móviles pequeños */
+@media (max-width: 480px) {
+  .hero-content {
+    margin-bottom: 3rem; /* espacio adicional entre el contenedor vidrio y la imagen */
   }
 }
 
@@ -495,15 +519,14 @@ img {
   background: var(--white);
   padding: 2rem;
   border-radius: 0.5rem;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
+  box-shadow: var(--shadow-flat);
+  transition: none;
   text-align: center;
 }
 
 .service-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: none;
+  box-shadow: var(--shadow-flat);
 }
 
 .service-icon {
@@ -527,14 +550,13 @@ img {
   background: var(--white);
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
+  box-shadow: var(--shadow-flat);
+  transition: none;
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: none;
+  box-shadow: var(--shadow-flat);
 }
 
 .project-image {
@@ -546,7 +568,7 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: none;
 }
 
 /* Overlay y efecto hover para proyectos */
@@ -572,12 +594,9 @@ img {
   opacity: 1;
 }
 
-.project-image:hover img {
-  transform: scale(1.06);
-}
-
+.project-image:hover img,
 .project-card:hover .project-image img {
-  transform: scale(1.05);
+  transform: none;
 }
 
 .project-content {
@@ -611,11 +630,11 @@ img {
 .about-image {
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: var(--shadow);
+  box-shadow: none;
 }
 
 .about-image img {
-  width: 100%;
+  width: 80%;
   height: auto;
   transition: transform 0.5s ease;
 }
@@ -919,4 +938,98 @@ img {
         margin-top: 2.5rem;
     }
     */
+}
+
+/* ==========================
+   Forzar layout hero en tablet/móvil
+   - Texto encima, imagen debajo
+   - Evitar solapamientos y controlar alturas
+   ========================== */
+@media (max-width: 1024px) {
+  .hero {
+    display: block !important;
+    padding: 6.5rem 1.25rem 3.5rem !important;
+    min-height: auto !important;
+    text-align: center;
+  }
+
+  /* Poner la imagen en el flujo y no detrás del contenido */
+  .hero-background {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    z-index: 0 !important;
+  }
+
+  .hero-image {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important; /* mostrar la imagen completa */
+    margin-top: 0.5rem !important; /* menos espacio */
+    display: block !important;
+  }
+
+  .hero-content {
+    position: relative !important;
+    z-index: 1 !important;
+    margin: 0 auto 1rem !important; /* reducir separación */
+    padding: 1.5rem 1rem !important;
+    max-width: 900px !important;
+    text-align: center !important;
+    background: transparent !important;
+  }
+
+  /* Asegurar que el overlay no interfiera en móviles */
+  .hero-overlay {
+    display: none !important;
+  }
+}
+
+/* Usar background-image en hero-background para tablet/móvil y ocultar la etiqueta img/picture */
+@media (max-width: 1024px) {
+  .hero-background {
+    background-image: url("img/github2.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 50vh;
+  }
+  .hero-image {
+    width: 100px;
+  }
+
+  /* ocultar el elemento <picture> / img visualmente para evitar duplicidad */
+  .hero-background picture,
+  .hero-background img {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-background {
+    min-height: 50vh;
+    background-size: cover;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 8rem 1rem 2.25rem !important;
+  }
+
+  .hero-image {
+    max-height: none !important;
+    margin-top: 0.5rem !important; /* menos espacio */
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  .hero-content {
+    margin-bottom: 1.25rem !important; /* reducir separación en móviles */
+    padding: 2rem 0.75rem !important;
+  }
 }
